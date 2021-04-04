@@ -11,7 +11,9 @@ var divisionHeight=300;
 var score = 0;
 var divisions;
 var score = 0;
-var particle;
+var ball;
+var count = 0;
+var gameState = "play";
 
 function setup() {
   createCanvas(800, 800);
@@ -55,9 +57,10 @@ function setup() {
 function draw() {
   background("black");
   textSize(20)
- //text("Score : "+score,20,30);
+ text("Score: "+score,690,30);
   Engine.update(engine);
  
+  console.log(gameState);
   
    for (var i = 0; i < plinkos.length; i++) {
      
@@ -73,9 +76,6 @@ function draw() {
      divisions[k].display();
      ground.display();
    }
-
-   text(mouseX + "," + mouseY,200,200);
-   text(score,300,200);
    
    for(var i = 25;i<305;i=i+80) {
      text("500",i,570);
@@ -89,11 +89,47 @@ function draw() {
     text("200",j,570);
    }
    
-    for (var j = 0; j < particles.length; j++) {
-      particles[j].display();
-    }
+   if(ball!=null)
+   {
+      ball.display();
+       
+       if (ball.body.position.y>760)
+       {
+             if (ball.body.position.x < 300) 
+             {
+                 score=score+500;      
+                 ball=null;
+                 if ( count>= 5) gameState ="end";                          
+             }
+
+
+             else if (ball.body.position.x < 600 && ball.body.position.x > 301 ) 
+             {
+                   score = score + 100;
+                   ball=null;
+                   if ( count>= 5) gameState ="end";
+
+             }
+             else if (ball.body.position.x < 900 && ball.body.position.x > 601 )
+             {
+                   score = score + 200;
+                   ball=null;
+                   if ( count>= 5)  gameState ="end";
+
+             }      
+             
+       }
+ 
+     }
+
+     if(gameState==="end") {
+       text("Game Ended",350,340);
+     }
 }
 
 function mousePressed() {
-   particles.push(new Particle(mouseX,mouseY,10));
+  if(gameState!="end") {
+   ball = new Particle(mouseX,1,10);
+   count++
+  }
 }

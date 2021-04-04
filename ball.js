@@ -1,4 +1,4 @@
-class Particle {
+class Ball {
     constructor(x, y,r) {
 
         var options ={
